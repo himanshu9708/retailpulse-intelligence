@@ -1,0 +1,21 @@
+# Core data handling
+pandas>=2.2
+numpy>=1.26
+
+# Visualization (Phase 7 EDA)
+matplotlib>=3.8
+seaborn>=0.13
+
+# Database (Phase 4+)
+SQLAlchemy>=2.0
+psycopg2-binary>=2.9   # PostgreSQL driver (only needed if using Postgres)
+
+# Notebooks
+jupyter>=1.0
+ipykernel>=6.29
+
+# Testing / data quality (Phase 14)
+pytest>=8.0
+
+# Config
+python-dotenv>=1.0
