@@ -8,7 +8,7 @@ Nothing below "Not started" has been implemented.
 | 1 | Project Planning & Repository Setup | Repo structure, docs, config files | ✅ Done |
 | 2 | Dataset Ingestion & Data Understanding | Data profiling report + data dictionary | ✅ Done (this commit) |
 | 3 | Data Cleaning & Validation | `data/processed/` clean dataset + decisions log | ✅ Done (this commit) |
-| 4 | SQL Database & Data Modeling | Schema + loaded relational DB | ⬜ Not started |
+| 4 | SQL Database & Data Modeling | Schema + loaded relational DB | ✅ Done (this commit) |
 | 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ⬜ Not started |
 | 6 | SQL Customer Analytics | Customer behavior SQL queries | ⬜ Not started |
 | 7 | Python Exploratory Data Analysis | EDA notebook/report | ⬜ Not started |
@@ -97,3 +97,29 @@ Nothing below "Not started" has been implemented.
 - [x] Revenue calculations are consistent (`Revenue USD` matches recomputation for all 62,884 rows; total = $55,755,479.59)
 
 **Commit:** `feat: implement data cleaning and validation`
+
+## Phase 4 — Detail
+
+**Objective:** Load the cleaned data into a relational database with a documented schema, proper keys, and validated referential integrity.
+
+**Engine decision:** SQLite (no PostgreSQL server available in this sandboxed environment — no network access). Schema is written in Postgres-compatible SQL (`sql/schema.sql`) with a SQLite-adapted loader, documented in `docs/database_schema.md`.
+
+**Deliverables:**
+- `sql/schema.sql` — Postgres-flavored DDL (canonical schema documentation)
+- `python/build_database.py` — builds `data/processed/ecommerce_analytics.db` from Phase 3's cleaned CSVs (idempotent, rebuildable)
+- `python/validate_phase4.py` — 21 automated checks; writes `reports/phase4_database_validation_report.md`
+- `docs/database_schema.md` — schema documentation, ERD, engine-choice rationale
+
+**Design:** Star schema — `fact_sales` (62,884 rows, one per order line item, grain preserved from Phase 3) surrounded by `dim_customer`, `dim_store`, `dim_product`, `dim_subcategory`, `dim_category`, `dim_date`, plus a standalone `exchange_rate` reference table.
+
+**Explicitly NOT done in this phase:** business-question SQL analytics (Phase 5/6), RFM, cohort analysis, dashboards.
+
+**Validation (all 21 checks passed):**
+- [x] Primary keys valid (unique, no nulls) on every table, including composite PK on `fact_sales`
+- [x] Foreign keys valid (`PRAGMA foreign_key_check` = 0 violations; manual join checks confirm 0 orphan rows on every relationship)
+- [x] Row counts match source CSVs exactly on every table
+- [x] No duplicate records
+- [x] Referential integrity fully intact end-to-end (customer → sales, product → subcategory → category, store, date)
+- [x] Total revenue in the database ($55,755,479.59) matches the Phase 3 CSV exactly
+
+**Commit:** `feat: create ecommerce analytics database schema`

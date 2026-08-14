@@ -4,9 +4,9 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 3 — Data Cleaning & Validation (complete)**
+> **Status: Phase 4 — SQL Database & Data Modeling (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (SQL modeling,
+> for the full roadmap and current status. Later phases (SQL analytics,
 > RFM, cohort analysis, dashboards, insights) have **not** been implemented yet.
 
 ---
@@ -64,8 +64,14 @@ referential integrity) is in [`reports/phase2_data_profiling_report.md`](reports
 `data/processed/` (0 rows dropped, 13/13 automated validation checks pass).
 **Total revenue across the full dataset: $55,755,479.59** (computed as
 `Quantity × Unit Price USD`, no FX conversion — see
-[`docs/cleaning_log.md`](docs/cleaning_log.md) for why). Full validation
-detail: [`reports/phase3_cleaning_validation_report.md`](reports/phase3_cleaning_validation_report.md).
+[`docs/cleaning_log.md`](docs/cleaning_log.md) for why).
+
+**Phase 4 result:** cleaned data is now loaded into a validated relational
+(SQLite) database at `data/processed/ecommerce_analytics.db`, modeled as a
+star schema (`fact_sales` + 6 dimension tables). All 21 schema/integrity
+checks pass, including an exact revenue reconciliation between the database
+and the Phase 3 CSVs. See [`docs/database_schema.md`](docs/database_schema.md)
+and [`reports/phase4_database_validation_report.md`](reports/phase4_database_validation_report.md).
 
 ## 4. Tech Stack
 
