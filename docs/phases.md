@@ -9,7 +9,7 @@ Nothing below "Not started" has been implemented.
 | 2 | Dataset Ingestion & Data Understanding | Data profiling report + data dictionary | ✅ Done (this commit) |
 | 3 | Data Cleaning & Validation | `data/processed/` clean dataset + decisions log | ✅ Done (this commit) |
 | 4 | SQL Database & Data Modeling | Schema + loaded relational DB | ✅ Done (this commit) |
-| 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ⬜ Not started |
+| 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ✅ Done (this commit) |
 | 6 | SQL Customer Analytics | Customer behavior SQL queries | ⬜ Not started |
 | 7 | Python Exploratory Data Analysis | EDA notebook/report | ⬜ Not started |
 | 8 | RFM Customer Segmentation | RFM scores + segments | ⬜ Not started |
@@ -123,3 +123,32 @@ Nothing below "Not started" has been implemented.
 - [x] Total revenue in the database ($55,755,479.59) matches the Phase 3 CSV exactly
 
 **Commit:** `feat: create ecommerce analytics database schema`
+
+## Phase 5 — Detail
+
+**Objective:** Use SQL to answer core sales, product, and geographic business questions — every query tied to a specific business question, not written to demonstrate syntax.
+
+**Deliverables:**
+- `sql/05_sales_analytics.sql` — 15 named queries across 3 sections (KPIs, Product Analysis, Geographic Analysis), using JOINs, CTEs, GROUP BY, CASE, window functions (RANK, LAG), and date functions (strftime)
+- `python/run_sql_analytics.py` — reusable runner that executes any `@query`-tagged `.sql` file against the database and renders a markdown report with actual results
+- `reports/phase5_sales_analytics_report.md` — generated report (query + real output table for all 15 queries)
+- `docs/phase5_findings.md` — findings summary, each item labeled Fact or Observation
+
+**Key facts established (see `docs/phase5_findings.md` for full detail):**
+- Total revenue $55,755,479.59 / 26,326 orders / AOV $2,117.89 — reconciles exactly across country, category, and channel breakdowns (cross-checked).
+- Revenue grew every full year 2016→2019, then fell 49.11% in 2020 across all 8 categories; 2021 is partial-year only.
+- Computers is the leading category (34.62% of revenue); 25 of 2,517 products have zero recorded sales.
+- Product profit margins cluster around ~3 fixed tiers (~49%, ~54%, ~66.9%), not a continuous spread — verified directly against the product catalog.
+- In-store = 79.55% of revenue vs. online 20.45%, with similar AOV — the gap is order volume, not order size.
+- US = 53.58% of revenue (customer-side); the "Online" channel alone outsells every country's physical stores except the US.
+
+**Explicitly NOT done in this phase:** customer-level behavior analytics (Phase 6), RFM, cohort analysis, dashboards, business recommendations.
+
+**Validation:**
+- [x] Every query answers a stated business question (documented inline)
+- [x] Uses JOIN, GROUP BY, CASE, CTEs, window functions, date functions, ranking functions as required
+- [x] All 15 queries execute successfully against the Phase 4 database
+- [x] Revenue totals reconcile exactly across every breakdown (country/category/channel all sum to $55,755,479.59)
+- [x] Findings labeled Fact vs. Observation; no unsupported claims
+
+**Commit:** `feat: add sales and product SQL analytics`

@@ -4,9 +4,9 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 4 — SQL Database & Data Modeling (complete)**
+> **Status: Phase 5 — SQL Sales Analytics (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (SQL analytics,
+> for the full roadmap and current status. Later phases (customer analytics,
 > RFM, cohort analysis, dashboards, insights) have **not** been implemented yet.
 
 ---
@@ -72,6 +72,15 @@ star schema (`fact_sales` + 6 dimension tables). All 21 schema/integrity
 checks pass, including an exact revenue reconciliation between the database
 and the Phase 3 CSVs. See [`docs/database_schema.md`](docs/database_schema.md)
 and [`reports/phase4_database_validation_report.md`](reports/phase4_database_validation_report.md).
+
+**Phase 5 result:** SQL sales/product/geographic analytics complete —
+15 business-question-driven queries, all results reconciling exactly to
+**$55,755,479.59** total revenue across every breakdown. Headline findings:
+Computers leads at 34.62% of revenue, revenue grew every year 2016-2019 then
+fell 49% in 2020, in-store outsells online 79.55% to 20.45%, and the US
+alone accounts for 53.58% of revenue. Full results:
+[`reports/phase5_sales_analytics_report.md`](reports/phase5_sales_analytics_report.md);
+findings summary (Fact vs. Observation): [`docs/phase5_findings.md`](docs/phase5_findings.md).
 
 ## 4. Tech Stack
 
