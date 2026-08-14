@@ -4,9 +4,9 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 2 — Dataset Ingestion & Data Understanding (complete)**
+> **Status: Phase 3 — Data Cleaning & Validation (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (cleaning, SQL modeling,
+> for the full roadmap and current status. Later phases (SQL modeling,
 > RFM, cohort analysis, dashboards, insights) have **not** been implemented yet.
 
 ---
@@ -59,6 +59,13 @@ referential integrity) is in [`reports/phase2_data_profiling_report.md`](reports
 * `StoreKey = 0` represents the **Online** sales channel (confirmed via `Stores.csv`), covering 20.94% of all sales rows — giving the project a genuine online vs. in-store dimension.
 * Referential integrity is fully intact across all tables (0 orphaned foreign keys).
 * `Products.csv` price/cost fields are stored as formatted text (e.g. `"$6.62 "`) and require parsing.
+
+**Phase 3 result:** a validated analytical dataset now exists in
+`data/processed/` (0 rows dropped, 13/13 automated validation checks pass).
+**Total revenue across the full dataset: $55,755,479.59** (computed as
+`Quantity × Unit Price USD`, no FX conversion — see
+[`docs/cleaning_log.md`](docs/cleaning_log.md) for why). Full validation
+detail: [`reports/phase3_cleaning_validation_report.md`](reports/phase3_cleaning_validation_report.md).
 
 ## 4. Tech Stack
 

@@ -7,7 +7,7 @@ Nothing below "Not started" has been implemented.
 |---|---|---|---|
 | 1 | Project Planning & Repository Setup | Repo structure, docs, config files | ✅ Done |
 | 2 | Dataset Ingestion & Data Understanding | Data profiling report + data dictionary | ✅ Done (this commit) |
-| 3 | Data Cleaning & Validation | `data/processed/` clean dataset + decisions log | ⬜ Not started |
+| 3 | Data Cleaning & Validation | `data/processed/` clean dataset + decisions log | ✅ Done (this commit) |
 | 4 | SQL Database & Data Modeling | Schema + loaded relational DB | ⬜ Not started |
 | 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ⬜ Not started |
 | 6 | SQL Customer Analytics | Customer behavior SQL queries | ⬜ Not started |
@@ -67,3 +67,33 @@ Nothing below "Not started" has been implemented.
 - [x] Data-quality issues documented as facts, with open items carried into Phase 3
 
 **Commit:** `feat: add dataset profiling and data dictionary`
+
+## Phase 3 — Detail
+
+**Objective:** Create a reliable analytical dataset in `data/processed/`, with every cleaning decision documented and validated. `data/raw/` remains untouched.
+
+**Deliverables:**
+- `python/clean_data.py` — reproducible cleaning script (raw → processed)
+- `python/validate_phase3.py` — automated validation (13 checks; writes `reports/phase3_cleaning_validation_report.md`)
+- `docs/cleaning_log.md` — every decision as Problem → Decision → Reason
+- `data/processed/` — 5 cleaned CSVs (sales, customers, products, stores, exchange rates)
+
+**Key decisions (see `docs/cleaning_log.md` for full detail):**
+- Parsed `Products.csv` price/cost text fields (`"$6.62 "`) to numeric.
+- `Revenue USD = Quantity × Unit Price USD` — **no FX conversion applied**, since `Unit Price USD` is already USD-denominated and `Exchange_Rates.csv` converts USD → local currency (verified: USD rate is always 1.0), not the reverse.
+- `Delivery Date` nulls kept as-is (not imputed/dropped) with a new `Is_Delivered` flag — dropping would remove ~79% of revenue.
+- `Stores.csv` gets an explicit `Is_Online` flag instead of relying on the `StoreKey == 0` convention.
+- No rows dropped anywhere — 0 duplicates, 0 orphan keys, no outliers warranting removal (all confirmed in Phase 2).
+
+**Explicitly NOT done in this phase:** SQL modeling, RFM, cohort analysis, dashboards.
+
+**Validation (all 13 automated checks passed):**
+- [x] No unexpected duplicate transaction records
+- [x] Valid dates (Order Date 100% valid; 0 delivery-before-order cases)
+- [x] Valid numeric fields (Quantity, Unit Price/Cost all pass range checks)
+- [x] Consistent categories (Category ↔ CategoryKey 1:1)
+- [x] Customer IDs usable (unique, 0 orphans in Sales)
+- [x] Order IDs usable (every order has ≥1 line item)
+- [x] Revenue calculations are consistent (`Revenue USD` matches recomputation for all 62,884 rows; total = $55,755,479.59)
+
+**Commit:** `feat: implement data cleaning and validation`
