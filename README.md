@@ -4,7 +4,7 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 1 — Project Planning & Repository Setup (in progress)**
+> **Status: Phase 2 — Dataset Ingestion & Data Understanding (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
 > for the full roadmap and current status. Later phases (cleaning, SQL modeling,
 > RFM, cohort analysis, dashboards, insights) have **not** been implemented yet.
@@ -49,15 +49,16 @@ into `data/processed/` in later phases.
 | `Exchange_Rates.csv` | 11,215 | Daily currency exchange rates vs. USD |
 | `Data_Dictionary.csv` | 37 | Source-provided field descriptions per table |
 
-Full column-level details are in [`docs/dataset_requirements.md`](docs/dataset_requirements.md).
-A deeper profiling report (missing values, duplicates, ranges, data-quality
-issues) will be produced in **Phase 2** and is intentionally not included here.
+Full column-level details are in [`docs/data_dictionary/data_dictionary.md`](docs/data_dictionary/data_dictionary.md),
+and the full Phase 2 profiling output (missing values, duplicates, ranges,
+referential integrity) is in [`reports/phase2_data_profiling_report.md`](reports/phase2_data_profiling_report.md).
 
-**Known limitation (documented now, addressed later):** `Sales.csv` does not
-include a price/revenue column directly — revenue must be derived by joining
-Sales → Products (`Unit Price USD`) and converting currencies via
-`Exchange_Rates.csv` where `Currency Code != USD`. This join logic will be
-formalized in Phase 4 (data modeling) and Phase 5 (SQL analytics).
+**Confirmed data characteristics (Phase 2 findings — facts, not assumptions):**
+* `Sales.csv` has no direct revenue column — revenue is derived as `Quantity × Products.Unit Price USD`, currency-adjusted via `Exchange_Rates.csv`.
+* `Delivery Date` is 79.06% missing (structural, not corrupted — 0 cases of delivery before order date).
+* `StoreKey = 0` represents the **Online** sales channel (confirmed via `Stores.csv`), covering 20.94% of all sales rows — giving the project a genuine online vs. in-store dimension.
+* Referential integrity is fully intact across all tables (0 orphaned foreign keys).
+* `Products.csv` price/cost fields are stored as formatted text (e.g. `"$6.62 "`) and require parsing.
 
 ## 4. Tech Stack
 
