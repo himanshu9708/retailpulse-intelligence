@@ -13,7 +13,7 @@ Nothing below "Not started" has been implemented.
 | 6 | SQL Customer Analytics | Customer behavior SQL queries | ✅ Done (this commit) |
 | 7 | Python Exploratory Data Analysis | EDA notebook/report | ✅ Done (this commit) |
 | 8 | RFM Customer Segmentation | RFM scores + segments | ✅ Done (this commit) |
-| 9 | Cohort & Retention Analysis | Cohort retention matrix | ⬜ Not started |
+| 9 | Cohort & Retention Analysis | Cohort retention matrix | ✅ Done (this commit) |
 | 10 | Business KPI Framework | KPI dictionary | ⬜ Not started |
 | 11 | Power BI Executive Dashboard | `.pbix` file | ⬜ Not started |
 | 12 | Tableau Customer & Product Analytics | `.twbx` workbook/story | ⬜ Not started |
@@ -240,3 +240,33 @@ Nothing below "Not started" has been implemented.
 - [x] Notable claim (disengagement predates 2020) independently verified by year-of-last-order breakdown before being reported as fact
 
 **Commit:** `feat: implement RFM customer segmentation`
+
+## Phase 9 — Detail
+
+**Objective:** Build monthly acquisition cohorts and a retention matrix, and answer whether customers are becoming more or less likely to return.
+
+**Deliverables:**
+- `python/cohort_analysis.py` — reproducible cohort/retention script
+- `data/processed/cohort_retention_matrix.csv` / `cohort_retention_pct.csv` — full 62×62 cohort matrices (counts and %)
+- `reports/figures/phase9/` — full-range heatmap (color-only), zoomed 0-12 month annotated heatmap, average retention curve
+- `reports/phase9_cohort_analysis_stats.md` — full computed stats
+- `docs/phase9_findings.md` — findings + explicit answer to the phase's required question
+
+**Bug caught and fixed mid-phase:** the initial pivot conflated "zero customers returned that month" with "period hasn't happened yet" (both showed as blank), which silently excluded real 0% months and inflated every retention average and the trend correlation (0.491 "improving" → corrected to 0.183 "weak/no trend"). Verified the fix against a specific case (2017-03 cohort, confirmed 0 of 98 customers returned in month 1) before trusting any downstream numbers.
+
+**Key facts established (see `docs/phase9_findings.md` for full detail):**
+- Average Month-1 retention is 2.84% — low in absolute terms but consistent with Phase 6's finding that this is a long-cycle, durable-goods business, not a benchmarking failure.
+- **Answer to "are customers becoming more/less likely to return?": no strong trend either way** (correlation between cohort start time and Month-1 retention = 0.183, weak).
+- Retention rises gradually to a peak around Month 30 (4.46%) then appears to decline — but the tail (Month 48+) is based on as few as 1 eligible cohort and is flagged as unreliable, not reported as a trend.
+- Best/worst cohorts differ depending on whether small cohorts are included (2018-04's "best" 8.70% is just 2 of 23 customers) — reported both the unrestricted and a ≥100-customer-restricted comparison for a fair read.
+
+**Explicitly NOT done in this phase:** KPI framework consolidation (Phase 10), dashboards, recommendations.
+
+**Validation:**
+- [x] Cohort matrix correctly distinguishes "0% retention" from "period not yet occurred" (verified against a specific known case)
+- [x] Average retention by period only computed over cohorts with full exposure to that period (documented, not silently averaged over incomplete cohorts)
+- [x] Required question explicitly answered with a number and appropriate uncertainty, not overstated
+- [x] Best/worst cohort claims checked for small-sample reliability before being reported
+- [x] Figures redesigned for readability after an initial version proved unreadable (62×62 annotated heatmap)
+
+**Commit:** `feat: add cohort retention analysis`

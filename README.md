@@ -4,9 +4,9 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 8 — RFM Customer Segmentation (complete)**
+> **Status: Phase 9 — Cohort & Retention Analysis (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (cohort analysis,
+> for the full roadmap and current status. Later phases (KPI framework,
 > dashboards, insights) have **not** been implemented yet.
 
 ---
@@ -108,6 +108,17 @@ an artifact of the 2020 downturn — 100% of "disengaged" segments' last
 orders predate 2020. Full methodology and findings:
 [`docs/phase8_rfm_methodology.md`](docs/phase8_rfm_methodology.md); segment
 data: [`reports/phase8_rfm_segment_summary.md`](reports/phase8_rfm_segment_summary.md).
+
+**Phase 9 result:** cohort/retention analysis complete for all 62 monthly
+cohorts. A real bug was caught and fixed mid-phase (0% retention months
+were being silently dropped rather than counted, inflating the trend
+signal from 0.183 to a false 0.491 "improving" reading). Corrected answer
+to the phase's required question: **no strong evidence customers are
+becoming more or less likely to return** over the life of the business.
+Average Month-1 retention is 2.84% — low but expected for this long-cycle,
+durable-goods business. Full findings:
+[`docs/phase9_findings.md`](docs/phase9_findings.md); figures:
+[`reports/figures/phase9/`](reports/figures/phase9/).
 
 ## 4. Tech Stack
 
