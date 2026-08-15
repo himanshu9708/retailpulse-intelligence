@@ -4,10 +4,10 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 7 — Python Exploratory Data Analysis (complete)**
+> **Status: Phase 8 — RFM Customer Segmentation (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (RFM, cohort
-> analysis, dashboards, insights) have **not** been implemented yet.
+> for the full roadmap and current status. Later phases (cohort analysis,
+> dashboards, insights) have **not** been implemented yet.
 
 ---
 
@@ -99,6 +99,15 @@ confirmed April is consistently the lowest-revenue month across all 5 full
 years, and order/customer revenue distributions are strongly right-skewed.
 Figures: [`reports/figures/phase7/`](reports/figures/phase7/); findings:
 [`docs/phase7_findings.md`](docs/phase7_findings.md).
+
+**Phase 8 result:** RFM segmentation complete for all 11,887 purchasing
+customers, using quintile-based (data-driven) scoring and a documented
+segment grid. Headline finding: **Champions + Loyal Customers (35.76% of
+customers) generate 61.66% of revenue.** Verified this concentration isn't
+an artifact of the 2020 downturn — 100% of "disengaged" segments' last
+orders predate 2020. Full methodology and findings:
+[`docs/phase8_rfm_methodology.md`](docs/phase8_rfm_methodology.md); segment
+data: [`reports/phase8_rfm_segment_summary.md`](reports/phase8_rfm_segment_summary.md).
 
 ## 4. Tech Stack
 

@@ -12,7 +12,7 @@ Nothing below "Not started" has been implemented.
 | 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ✅ Done (this commit) |
 | 6 | SQL Customer Analytics | Customer behavior SQL queries | ✅ Done (this commit) |
 | 7 | Python Exploratory Data Analysis | EDA notebook/report | ✅ Done (this commit) |
-| 8 | RFM Customer Segmentation | RFM scores + segments | ⬜ Not started |
+| 8 | RFM Customer Segmentation | RFM scores + segments | ✅ Done (this commit) |
 | 9 | Cohort & Retention Analysis | Cohort retention matrix | ⬜ Not started |
 | 10 | Business KPI Framework | KPI dictionary | ⬜ Not started |
 | 11 | Power BI Executive Dashboard | `.pbix` file | ⬜ Not started |
@@ -207,3 +207,36 @@ Nothing below "Not started" has been implemented.
 - [x] No manufactured conclusions; findings labeled Fact vs. Observation
 
 **Commit:** `feat: add exploratory data analysis`
+
+## Phase 8 — Detail
+
+**Objective:** Segment customers by purchasing behavior (Recency, Frequency, Monetary), with methodology documented and labels validated against the actual data.
+
+**Deliverables:**
+- `python/rfm_segmentation.py` — reproducible RFM scoring + segmentation script
+- `data/processed/customer_rfm.csv` — one row per purchasing customer (R/F/M values, scores, segment)
+- `reports/phase8_rfm_segment_summary.md` — segment-level aggregates (count, revenue, avg spend/frequency/recency)
+- `docs/phase8_rfm_methodology.md` — full methodology + findings, including why 2 of the brief's suggested segment names were deliberately dropped
+
+**Key methodology decisions:**
+- Scope: 11,887 customers with ≥1 order (Phase 6). The 3,379 non-purchasers are excluded, not labeled "Lost" — RFM is undefined without a purchase history.
+- Snapshot date: 2021-02-21 (day after last order in dataset).
+- Quintile-based (data-driven) scoring, not fixed day/order thresholds — justified by Phase 6's finding that this is a long-cycle, durable-goods business (median 2 orders/customer, 44.74% of repeat customers spread over 1+ years).
+- Frequency has too few unique values (1–14) for plain quintile cuts, so ties are broken by rank before cutting — documented, not silently patched.
+- Segment grid intentionally drops "Hibernating" from the brief's suggested list — its intent is already covered by "About To Sleep"/"Lost", and keeping it would only fragment identical customer groups (the phase's own "don't force labels the data doesn't support" rule, applied).
+
+**Key facts established (see `docs/phase8_rfm_methodology.md` for full detail):**
+- **Champions + Loyal Customers** (35.76% of customers) generate **61.66%** of revenue — the sharpest concentration finding in the project.
+- Verified the "disengaged" segments (At Risk, Can't Lose Them, Lost — 30.85% of customers) are **not** an artifact of the 2020 revenue decline: 100% of their last orders predate 2020, while Champions/Loyal Customers skew heavily toward 2020 — confirming the segmentation reflects genuine long-term drop-off, not a one-year anomaly.
+- All totals reconcile exactly to Phase 6: 11,887 customers, $55,755,479.59 revenue.
+
+**Explicitly NOT done in this phase:** cohort/retention analysis (Phase 9), dashboards, recommendations.
+
+**Validation:**
+- [x] RFM computed only for customers with purchase history (scope documented)
+- [x] Scoring method (quintiles) justified against the actual data distribution, not assumed
+- [x] Segment counts, revenue, avg spend, avg frequency all computed and reported per segment
+- [x] Segment totals reconcile exactly with Phase 6 (11,887 customers, $55,755,479.59)
+- [x] Notable claim (disengagement predates 2020) independently verified by year-of-last-order breakdown before being reported as fact
+
+**Commit:** `feat: implement RFM customer segmentation`
