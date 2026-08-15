@@ -5,6 +5,7 @@ numpy>=1.26
 # Visualization (Phase 7 EDA)
 matplotlib>=3.8
 seaborn>=0.13
+scipy>=1.11
 
 # Database (Phase 4+)
 SQLAlchemy>=2.0

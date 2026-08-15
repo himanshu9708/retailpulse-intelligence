@@ -4,10 +4,10 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 6 — SQL Customer Analytics (complete)**
+> **Status: Phase 7 — Python Exploratory Data Analysis (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (Python EDA, RFM,
-> cohort analysis, dashboards, insights) have **not** been implemented yet.
+> for the full roadmap and current status. Later phases (RFM, cohort
+> analysis, dashboards, insights) have **not** been implemented yet.
 
 ---
 
@@ -90,6 +90,15 @@ generating **82.39%** of revenue; revenue concentration is moderate (top
 22.13% of registered customers have never ordered. Full results:
 [`reports/phase6_customer_analytics_report.md`](reports/phase6_customer_analytics_report.md);
 findings summary: [`docs/phase6_findings.md`](docs/phase6_findings.md).
+
+**Phase 7 result:** Python EDA complete — 10 figures + computed statistics
+surfacing patterns SQL alone didn't show. Headline new finding: revenue by
+day-of-week is highly uneven (Saturday peak $13.20M vs. Sunday trough
+$0.91M, ~14x gap), verified via order counts across both channels. Also
+confirmed April is consistently the lowest-revenue month across all 5 full
+years, and order/customer revenue distributions are strongly right-skewed.
+Figures: [`reports/figures/phase7/`](reports/figures/phase7/); findings:
+[`docs/phase7_findings.md`](docs/phase7_findings.md).
 
 ## 4. Tech Stack
 

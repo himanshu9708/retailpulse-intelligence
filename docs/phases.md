@@ -11,7 +11,7 @@ Nothing below "Not started" has been implemented.
 | 4 | SQL Database & Data Modeling | Schema + loaded relational DB | ✅ Done (this commit) |
 | 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ✅ Done (this commit) |
 | 6 | SQL Customer Analytics | Customer behavior SQL queries | ✅ Done (this commit) |
-| 7 | Python Exploratory Data Analysis | EDA notebook/report | ⬜ Not started |
+| 7 | Python Exploratory Data Analysis | EDA notebook/report | ✅ Done (this commit) |
 | 8 | RFM Customer Segmentation | RFM scores + segments | ⬜ Not started |
 | 9 | Cohort & Retention Analysis | Cohort retention matrix | ⬜ Not started |
 | 10 | Business KPI Framework | KPI dictionary | ⬜ Not started |
@@ -179,3 +179,31 @@ Nothing below "Not started" has been implemented.
 - [x] Findings labeled Fact vs. Observation; no unsupported claims
 
 **Commit:** `feat: add customer behavior SQL analytics`
+
+## Phase 7 — Detail
+
+**Objective:** Use Python (Pandas, NumPy, Matplotlib, Seaborn, SciPy) to surface patterns not obvious from SQL aggregates — distribution shape, outliers, seasonality, and bivariate relationships.
+
+**Deliverables:**
+- `python/eda.py` — reproducible EDA script (reads `data/processed/`, writes figures + stats, changes nothing)
+- `reports/figures/phase7/` — 10 generated PNG figures
+- `reports/phase7_eda_stats.md` — raw computed statistics backing every figure
+- `docs/phase7_findings.md` — findings summary (Fact vs. Observation), including what Python EDA added beyond the SQL phases
+
+**Key facts established (see `docs/phase7_findings.md` for full detail):**
+- Order revenue is strongly right-skewed (skewness 3.51); IQR outliers (7.37% of orders) are legitimate large purchases contributing 34.58% of revenue, not data errors.
+- **New finding not seen in SQL phases:** revenue by day-of-week is highly uneven — Saturday is the peak ($13.20M) and Sunday dramatically the trough ($0.91M, ~14x gap) — verified via order counts and confirmed to hold separately for both online and in-store channels.
+- April is consistently the lowest-revenue month across all 5 full years (avg $121,466.81) vs. December's peak (avg $1,499,321.77) — a real recurring seasonal pattern.
+- Product-level quantity-vs-revenue correlation is moderate (0.515), confirming top-sellers-by-volume and top-sellers-by-revenue are related but distinct lists.
+- New dimension added: purchasing customers average 52.3 years old (median 52.4), a fairly centered distribution.
+
+**Explicitly NOT done in this phase:** RFM segmentation (Phase 8), cohort/retention analysis (Phase 9), dashboards, recommendations.
+
+**Validation:**
+- [x] Script runs end-to-end against `data/processed/` without modifying it
+- [x] All 10 figures generated and visually reviewed for correctness/readability
+- [x] Every statistic in the findings doc traces to `reports/phase7_eda_stats.md`
+- [x] Notable/surprising findings (e.g. Sunday revenue dip) independently verified with a second method (order counts, channel breakdown) before being reported as fact
+- [x] No manufactured conclusions; findings labeled Fact vs. Observation
+
+**Commit:** `feat: add exploratory data analysis`
