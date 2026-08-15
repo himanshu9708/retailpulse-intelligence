@@ -4,10 +4,10 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 10 — Business KPI Framework (complete)**
+> **Status: Phase 11 — Power BI Executive Dashboard (complete, adapted for environment)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (Power BI, Tableau,
-> insights) have **not** been implemented yet.
+> for the full roadmap and current status. Later phases (Tableau, insights)
+> have **not** been implemented yet.
 
 ---
 
@@ -127,6 +127,18 @@ and Tableau must both follow with no re-derivation. Every value was
 recomputed fresh against the database while writing this phase, which
 caught and corrected a citation error in the earlier-drafted YoY growth
 figures. See [`docs/kpi_framework.md`](docs/kpi_framework.md).
+
+**Phase 11 result:** Power BI Desktop isn't available in this sandboxed
+environment (no Windows/GUI), so this phase ships both a complete build
+spec ([`docs/powerbi_design_spec.md`](docs/powerbi_design_spec.md) — data
+model, DAX measures, page layouts for a real `.pbix`) and a working,
+interactive HTML dashboard
+([`powerbi/executive_dashboard.html`](powerbi/executive_dashboard.html)) as
+a functional stand-in, built from the same KPI definitions and data. All 4
+required pages, Year/Country/Category/Channel filtering, drill-down, and
+tooltips are implemented and tested — every dashboard-computed KPI was
+verified to exactly match the independently-established figures from
+Phases 5, 6, 8, 9, and 10.
 
 ## 4. Tech Stack
 

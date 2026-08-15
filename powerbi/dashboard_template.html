@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Commerce Executive Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #10243E;
+    --navy-light: #1B3A5C;
+    --teal: #1FA2A6;
+    --amber: #E8A33D;
+    --red: #C4544A;
+    --green: #3C9D6B;
+    --bg: #F4F6F8;
+    --card: #FFFFFF;
+    --text: #1B2430;
+    --text-mute: #64748B;
+    --border: #E2E6EB;
+    --font-display: "Segoe UI Semibold", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-data: "Consolas", "SF Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--font-body); font-size: 14px;
+  }
+  header.top {
+    background: var(--navy); color: #fff; padding: 14px 24px;
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  }
+  header.top h1 { font-family: var(--font-display); font-size: 18px; margin: 0; font-weight: 600; letter-spacing: 0.2px; }
+  header.top .subtitle { color: #B8C4D4; font-size: 12.5px; }
+  nav.tabs {
+    display: flex; gap: 2px; background: var(--navy-light); padding: 0 20px;
+  }
+  nav.tabs button {
+    background: transparent; border: none; color: #C9D4E0; padding: 12px 18px;
+    font-family: var(--font-body); font-size: 13.5px; font-weight: 600; cursor: pointer;
+    border-bottom: 3px solid transparent; transition: all 0.15s ease;
+  }
+  nav.tabs button:hover { color: #fff; }
+  nav.tabs button.active { color: #fff; border-bottom-color: var(--teal); }
+
+  .filterbar {
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    background: var(--card); padding: 10px 20px; border-bottom: 1px solid var(--border);
+  }
+  .filterbar label { font-size: 12px; color: var(--text-mute); margin-right: 4px; }
+  .filterbar select {
+    font-family: var(--font-body); font-size: 12.5px; padding: 5px 8px; border-radius: 4px;
+    border: 1px solid var(--border); background: #fff; color: var(--text);
+  }
+  .filterbar .chip {
+    background: #EAF6F6; color: var(--teal); border: 1px solid #C7E8E8; border-radius: 12px;
+    padding: 3px 10px; font-size: 11.5px; font-weight: 600;
+  }
+  .filterbar button.reset {
+    margin-left: auto; background: none; border: 1px solid var(--border); border-radius: 4px;
+    padding: 5px 12px; font-size: 12px; color: var(--text-mute); cursor: pointer;
+  }
+  .filterbar button.reset:hover { border-color: var(--teal); color: var(--teal); }
+
+  main { padding: 20px; max-width: 1400px; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .kpirow { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--teal);
+    border-radius: 6px; padding: 12px 14px;
+  }
+  .kpi .label { font-size: 11px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+  .kpi .value { font-family: var(--font-data); font-size: 22px; font-weight: 700; color: var(--navy); }
+  .kpi .delta { font-size: 11.5px; margin-top: 3px; font-weight: 600; }
+  .kpi .delta.up { color: var(--green); }
+  .kpi .delta.down { color: var(--red); }
+  .kpi.warn { border-left-color: var(--amber); }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .grid.thirds { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px;
+  }
+  .card h3 { font-family: var(--font-display); font-size: 13.5px; margin: 0 0 10px 0; color: var(--navy); font-weight: 600; }
+  .card .note { font-size: 11px; color: var(--text-mute); margin-top: 6px; }
+  .card.span2 { grid-column: span 2; }
+  canvas { max-height: 280px; }
+
+  table.datatable { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.datatable th { text-align: left; color: var(--text-mute); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; }
+  table.datatable td { padding: 6px 8px; border-bottom: 1px solid #F0F2F5; }
+  table.datatable tr:hover td { background: #FAFBFC; }
+  table.datatable td.num { font-family: var(--font-data); text-align: right; }
+
+  .footer-note { text-align: center; color: var(--text-mute); font-size: 11px; padding: 24px 0 10px; }
+
+  @media (max-width: 900px) {
+    .grid, .grid.thirds { grid-template-columns: 1fr; }
+    .card.span2 { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>E-Commerce Customer &amp; Sales Intelligence</h1>
+  <span class="subtitle">Global Electronics Retailer &middot; Jan 2016 &ndash; Feb 2021 (2021 partial year) &middot; All figures per docs/kpi_framework.md</span>
+</header>
+
+<nav class="tabs">
+  <button data-page="overview" class="active">Executive Overview</button>
+  <button data-page="sales">Sales Performance</button>
+  <button data-page="customer">Customer Intelligence</button>
+  <button data-page="retention">Retention</button>
+</nav>
+
+<div class="filterbar">
+  <label>Year</label>
+  <select id="filterYear"><option value="all">All Years</option></select>
+  <label>Country</label>
+  <select id="filterCountry"><option value="all">All Countries</option></select>
+  <label>Category</label>
+  <select id="filterCategory"><option value="all">All Categories</option></select>
+  <label>Channel</label>
+  <select id="filterChannel"><option value="all">All Channels</option></select>
+  <span class="chip" id="scopeChip">Showing: All Data</span>
+  <button class="reset" id="resetFilters">Reset filters</button>
+</div>
+
+<main>
+
+  <!-- PAGE 1: EXECUTIVE OVERVIEW -->
+  <section class="page active" id="page-overview">
+    <div class="kpirow" id="ov-kpis"></div>
+    <div class="grid">
+      <div class="card span2"><h3>Revenue Trend</h3><canvas id="ov-trend"></canvas></div>
+      <div class="card"><h3>Revenue by Category</h3><canvas id="ov-category"></canvas></div>
+      <div class="card"><h3>Revenue by Country</h3><canvas id="ov-country"></canvas></div>
+    </div>
+    <div class="grid" style="margin-top:14px;">
+      <div class="card"><h3>Top 10 Products by Revenue</h3><table class="datatable" id="ov-topproducts"></table></div>
+      <div class="card"><h3>Customer Segments (RFM)</h3><canvas id="ov-segments"></canvas></div>
+    </div>
+  </section>
+
+  <!-- PAGE 2: SALES PERFORMANCE -->
+  <section class="page" id="page-sales">
+    <div class="kpirow" id="sp-kpis"></div>
+    <div class="grid">
+      <div class="card span2"><h3>Monthly Revenue &amp; Orders</h3><canvas id="sp-monthly"></canvas></div>
+      <div class="card"><h3>Category Performance (click a bar to filter)</h3><canvas id="sp-category"></canvas></div>
+      <div class="card"><h3>Yearly Revenue Growth (YoY %)</h3><canvas id="sp-growth"></canvas></div>
+    </div>
+    <div class="grid" style="margin-top:14px;">
+      <div class="card span2"><h3>Product Performance</h3><table class="datatable" id="sp-products"></table></div>
+    </div>
+  </section>
+
+  <!-- PAGE 3: CUSTOMER INTELLIGENCE -->
+  <section class="page" id="page-customer">
+    <div class="kpirow" id="ci-kpis"></div>
+    <div class="grid">
+      <div class="card"><h3>RFM Segment Distribution</h3><canvas id="ci-segments"></canvas></div>
+      <div class="card"><h3>New Customers Acquired by Year</h3><canvas id="ci-newcust"></canvas></div>
+    </div>
+    <div class="grid" style="margin-top:14px;">
+      <div class="card span2"><h3>Segment Detail (customers, revenue, avg spend)</h3><table class="datatable" id="ci-segtable"></table></div>
+    </div>
+  </section>
+
+  <!-- PAGE 4: RETENTION -->
+  <section class="page" id="page-retention">
+    <div class="kpirow" id="rt-kpis"></div>
+    <div class="grid">
+      <div class="card span2">
+        <h3>Cohort Retention Curve (avg % of cohort active, by months since first purchase)</h3>
+        <canvas id="rt-curve"></canvas>
+        <div class="note">Averaged only over cohorts with full exposure to that month (Phase 9 methodology). Capped at 24 months for readability.</div>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:14px;">
+      <div class="card span2">
+        <h3>At-Risk Segments — Focus for Retention Efforts</h3>
+        <table class="datatable" id="rt-atrisk"></table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer-note">
+  Built from data/processed/ecommerce_analytics.db &middot; KPI definitions: docs/kpi_framework.md &middot;
+  This HTML dashboard is a functional stand-in for Power BI Desktop, which is unavailable in this sandboxed environment (see docs/powerbi_design_spec.md).
+</div>
+
+<script>
+const DATA = __DASHBOARD_DATA__;
+</script>
+<script src="dashboard_app.js"></script>
+</body>
+</html>
