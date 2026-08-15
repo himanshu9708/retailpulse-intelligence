@@ -10,7 +10,7 @@ Nothing below "Not started" has been implemented.
 | 3 | Data Cleaning & Validation | `data/processed/` clean dataset + decisions log | ✅ Done (this commit) |
 | 4 | SQL Database & Data Modeling | Schema + loaded relational DB | ✅ Done (this commit) |
 | 5 | SQL Sales Analytics | Revenue/product/geo SQL queries | ✅ Done (this commit) |
-| 6 | SQL Customer Analytics | Customer behavior SQL queries | ⬜ Not started |
+| 6 | SQL Customer Analytics | Customer behavior SQL queries | ✅ Done (this commit) |
 | 7 | Python Exploratory Data Analysis | EDA notebook/report | ⬜ Not started |
 | 8 | RFM Customer Segmentation | RFM scores + segments | ⬜ Not started |
 | 9 | Cohort & Retention Analysis | Cohort retention matrix | ⬜ Not started |
@@ -152,3 +152,30 @@ Nothing below "Not started" has been implemented.
 - [x] Findings labeled Fact vs. Observation; no unsupported claims
 
 **Commit:** `feat: add sales and product SQL analytics`
+
+## Phase 6 — Detail
+
+**Objective:** Understand customer purchasing behavior — repeat rate, purchase frequency, revenue concentration, top customers, segment contribution.
+
+**Deliverables:**
+- `sql/06_customer_analytics.sql` — 9 named queries (CTEs, `NTILE` for decile analysis, `RANK`, `CASE`-based bucketing, `julianday` date-math)
+- `reports/phase6_customer_analytics_report.md` — generated report with real results for all 9 queries
+- `docs/phase6_findings.md` — findings summary (Fact vs. Observation) + explicit answers to the phase's 3 required business questions
+
+**Key facts established (see `docs/phase6_findings.md` for full detail):**
+- 22.13% of registered customers (3,379 of 15,266) have never ordered; customer-behavior metrics are scoped to the 11,887 who have.
+- **61.18%** of purchasing customers are repeat buyers (2+ orders), generating **82.39%** of revenue — driven by both higher order counts and ~3x higher average spend per customer, not just order volume.
+- Revenue concentration is moderate: top 10% of customers = 35.98% of revenue, top 30% = 69.07%, bottom 50% = only 13.36%. No single customer or small outlier group dominates (top customer = 0.11% of revenue).
+- New-customer acquisition peaked in 2018 (3,104) and fell sharply in 2020 (947), mirroring the Phase 5 revenue decline.
+- 44.74% of purchasing customers have repeat orders spread over more than a year — a long-cycle, durable-goods purchase pattern, relevant context for RFM recency thresholds in Phase 8.
+- Revenue by country sums reconcile exactly to the same $55,755,479.59 total established in Phase 5.
+
+**Explicitly NOT done in this phase:** RFM scoring/segmentation (Phase 8), cohort/retention analysis (Phase 9), dashboards, recommendations.
+
+**Validation:**
+- [x] Every query answers a stated business question (documented inline)
+- [x] All 3 phase-required questions explicitly answered with numbers
+- [x] Revenue totals reconcile exactly with Phase 5 SQL analytics and the Phase 3/4 dataset ($55,755,479.59)
+- [x] Findings labeled Fact vs. Observation; no unsupported claims
+
+**Commit:** `feat: add customer behavior SQL analytics`

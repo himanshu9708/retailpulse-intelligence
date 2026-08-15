@@ -4,10 +4,10 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 5 — SQL Sales Analytics (complete)**
+> **Status: Phase 6 — SQL Customer Analytics (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (customer analytics,
-> RFM, cohort analysis, dashboards, insights) have **not** been implemented yet.
+> for the full roadmap and current status. Later phases (Python EDA, RFM,
+> cohort analysis, dashboards, insights) have **not** been implemented yet.
 
 ---
 
@@ -81,6 +81,15 @@ fell 49% in 2020, in-store outsells online 79.55% to 20.45%, and the US
 alone accounts for 53.58% of revenue. Full results:
 [`reports/phase5_sales_analytics_report.md`](reports/phase5_sales_analytics_report.md);
 findings summary (Fact vs. Observation): [`docs/phase5_findings.md`](docs/phase5_findings.md).
+
+**Phase 6 result:** SQL customer analytics complete — 9 queries covering
+repeat-purchase behavior, revenue concentration, and segment contribution.
+Headline findings: **61.18%** of purchasing customers are repeat buyers,
+generating **82.39%** of revenue; revenue concentration is moderate (top
+10% of customers = 35.98% of revenue, no single "whale" customer); and
+22.13% of registered customers have never ordered. Full results:
+[`reports/phase6_customer_analytics_report.md`](reports/phase6_customer_analytics_report.md);
+findings summary: [`docs/phase6_findings.md`](docs/phase6_findings.md).
 
 ## 4. Tech Stack
 
