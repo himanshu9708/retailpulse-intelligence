@@ -14,7 +14,7 @@ Nothing below "Not started" has been implemented.
 | 7 | Python Exploratory Data Analysis | EDA notebook/report | ✅ Done (this commit) |
 | 8 | RFM Customer Segmentation | RFM scores + segments | ✅ Done (this commit) |
 | 9 | Cohort & Retention Analysis | Cohort retention matrix | ✅ Done (this commit) |
-| 10 | Business KPI Framework | KPI dictionary | ⬜ Not started |
+| 10 | Business KPI Framework | KPI dictionary | ✅ Done (this commit) |
 | 11 | Power BI Executive Dashboard | `.pbix` file | ⬜ Not started |
 | 12 | Tableau Customer & Product Analytics | `.twbx` workbook/story | ⬜ Not started |
 | 13 | Business Insights & Recommendations | Insights report | ⬜ Not started |
@@ -270,3 +270,25 @@ Nothing below "Not started" has been implemented.
 - [x] Figures redesigned for readability after an initial version proved unreadable (62×62 annotated heatmap)
 
 **Commit:** `feat: add cohort retention analysis`
+
+## Phase 10 — Detail
+
+**Objective:** Define the single, official set of KPIs that Power BI and Tableau (Phases 11-12) will both draw from — no re-derivation, no divergent definitions.
+
+**Deliverables:**
+- `docs/kpi_framework.md` — 12 KPIs (Revenue, Orders, Customers, Units Sold, AOV, Revenue per Customer, New Customers, Repeat Customers, Repeat Purchase Rate, Historical CLV, Revenue Growth, Customer Retention), each with Definition / Formula / Source / Verified Current Value / Business Interpretation, plus global conventions (currency, geography, channel, customer scope, partial-year handling) and a per-dashboard-page KPI assignment table
+
+**Verification approach:** every "current value" in the framework was **recomputed fresh** against the database while writing this phase, not copied from earlier phase reports — this caught and corrected a citation error (initial YoY growth figures for 2017-2019 were wrong; corrected to +6.83% / +72.32% / +42.81% after re-querying). All other cross-referenced figures (2018/2020 new customer counts, median order value, skewness) were independently re-verified and confirmed exact.
+
+**Key design decision:** "Repeat Purchase Rate" (61.18%, Phase 6) and "Customer Retention (Cohort, Month-1)" (2.84%, Phase 9) are **both legitimate but measure different things** at different time grains. The framework explicitly documents this distinction and mandates both labels always appear together on any dashboard showing retention, to prevent the two correct-but-different numbers from looking like a contradiction.
+
+**Explicitly NOT done in this phase:** actual dashboard building (Phase 11/12), business recommendations (Phase 13).
+
+**Validation:**
+- [x] Every KPI has Definition, Formula, SQL/Python source, and Business Interpretation
+- [x] Same KPI definitions apply across Power BI and Tableau — no tool-specific formulas
+- [x] All current values recomputed and verified against the database during this phase (not assumed from earlier phase text)
+- [x] Global conventions (currency, geography, channel, scope, partial-year) documented once, referenced everywhere
+- [x] Potentially confusing KPI pair (Repeat Purchase Rate vs. Cohort Retention) explicitly reconciled to prevent dashboard inconsistency
+
+**Commit:** `docs: define business KPI framework`

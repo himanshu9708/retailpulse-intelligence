@@ -4,10 +4,10 @@ End-to-end Data Analytics & Business Intelligence project analyzing a global
 electronics retailer's sales, customers, and product performance using
 **Python, SQL, Power BI, and Tableau**.
 
-> **Status: Phase 9 — Cohort & Retention Analysis (complete)**
+> **Status: Phase 10 — Business KPI Framework (complete)**
 > This project is being built phase-by-phase. See [`docs/phases.md`](docs/phases.md)
-> for the full roadmap and current status. Later phases (KPI framework,
-> dashboards, insights) have **not** been implemented yet.
+> for the full roadmap and current status. Later phases (Power BI, Tableau,
+> insights) have **not** been implemented yet.
 
 ---
 
@@ -119,6 +119,14 @@ Average Month-1 retention is 2.84% — low but expected for this long-cycle,
 durable-goods business. Full findings:
 [`docs/phase9_findings.md`](docs/phase9_findings.md); figures:
 [`reports/figures/phase9/`](reports/figures/phase9/).
+
+**Phase 10 result:** the official KPI framework is now defined — 12 KPIs,
+each with a formula, source, and verified current value, plus global
+conventions (currency, geography, channel, customer scope) that Power BI
+and Tableau must both follow with no re-derivation. Every value was
+recomputed fresh against the database while writing this phase, which
+caught and corrected a citation error in the earlier-drafted YoY growth
+figures. See [`docs/kpi_framework.md`](docs/kpi_framework.md).
 
 ## 4. Tech Stack
 
