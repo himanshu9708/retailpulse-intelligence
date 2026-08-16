@@ -1,0 +1,138 @@
+table fact_sales
+	column OrderNumber
+		dataType: int64
+		sourceColumn: Order Number
+		summarizeBy: none
+
+	column LineItem
+		dataType: int64
+		sourceColumn: Line Item
+		summarizeBy: none
+
+	column OrderDate
+		dataType: dateTime
+		sourceColumn: Order Date
+		summarizeBy: none
+		formatString: Long Date
+
+	column DeliveryDate
+		dataType: dateTime
+		sourceColumn: Delivery Date
+		summarizeBy: none
+		formatString: Long Date
+
+	column CustomerKey
+		dataType: int64
+		sourceColumn: CustomerKey
+		summarizeBy: none
+
+	column StoreKey
+		dataType: int64
+		sourceColumn: StoreKey
+		summarizeBy: none
+
+	column ProductKey
+		dataType: int64
+		sourceColumn: ProductKey
+		summarizeBy: none
+
+	column Quantity
+		dataType: int64
+		sourceColumn: Quantity
+		summarizeBy: sum
+
+	column CurrencyCode
+		dataType: string
+		sourceColumn: Currency Code
+		summarizeBy: none
+
+	column IsDelivered
+		dataType: boolean
+		sourceColumn: Is_Delivered
+		summarizeBy: none
+
+	column UnitPriceUSD
+		dataType: double
+		sourceColumn: Unit Price USD
+		summarizeBy: none
+		formatString: \$ #,##0.00
+
+	column UnitCostUSD
+		dataType: double
+		sourceColumn: Unit Cost USD
+		summarizeBy: none
+		formatString: \$ #,##0.00
+
+	column RevenueUSD
+		dataType: double
+		sourceColumn: Revenue USD
+		summarizeBy: sum
+		formatString: \$ #,##0.00
+
+	column CostUSD
+		dataType: double
+		sourceColumn: Cost USD
+		summarizeBy: sum
+		formatString: \$ #,##0.00
+
+	column ProfitUSD
+		dataType: double
+		sourceColumn: Profit USD
+		summarizeBy: sum
+		formatString: \$ #,##0.00
+
+	measure 'Total Revenue' = SUM(fact_sales[RevenueUSD])
+		formatString: \$ #,##0
+
+	measure 'Total Orders' = DISTINCTCOUNT(fact_sales[OrderNumber])
+		formatString: #,##0
+
+	measure 'Total Customers' = DISTINCTCOUNT(fact_sales[CustomerKey])
+		formatString: #,##0
+
+	measure 'Units Sold' = SUM(fact_sales[Quantity])
+		formatString: #,##0
+
+	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Orders])
+		formatString: \$ #,##0.00
+
+	measure 'Revenue per Customer' = DIVIDE([Total Revenue], [Total Customers])
+		formatString: \$ #,##0.00
+
+	measure 'Historical CLV' = [Revenue per Customer]
+		formatString: \$ #,##0.00
+		/// Same formula as Revenue per Customer; kept separate so it can be
+		/// labeled 'Historical CLV' on customer pages. NOT a predictive CLV
+		/// model -- see docs/kpi_framework.md.
+
+	measure 'Revenue YoY Growth %' = ```
+			VAR CurrentYearRevenue = [Total Revenue]
+			VAR PriorYearRevenue = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_date[DateKey]))
+			RETURN DIVIDE(CurrentYearRevenue - PriorYearRevenue, PriorYearRevenue)
+			```
+		formatString: 0.00%
+
+	measure 'Repeat Customers' = ```
+			CALCULATE(
+			    DISTINCTCOUNT(fact_sales[CustomerKey]),
+			    FILTER(
+			        VALUES(fact_sales[CustomerKey]),
+			        CALCULATE(DISTINCTCOUNT(fact_sales[OrderNumber])) >= 2
+			    )
+			)
+			```
+		formatString: #,##0
+
+	measure 'Repeat Purchase Rate %' = DIVIDE([Repeat Customers], [Total Customers])
+		formatString: 0.00%
+
+	partition fact_sales = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "sales_clean.csv"),[Delimiter=",", Columns=15, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Headers,{{"Order Number", Int64.Type}, {"Line Item", Int64.Type}, {"Order Date", type date}, {"Delivery Date", type date}, {"CustomerKey", Int64.Type}, {"StoreKey", Int64.Type}, {"ProductKey", Int64.Type}, {"Quantity", Int64.Type}, {"Currency Code", type text}, {"Is_Delivered", type logical}, {"Unit Price USD", type number}, {"Unit Cost USD", type number}, {"Revenue USD", type number}, {"Cost USD", type number}, {"Profit USD", type number}})
+			in
+			    Typed
+		```

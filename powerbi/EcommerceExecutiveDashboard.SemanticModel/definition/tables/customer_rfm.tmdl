@@ -1,0 +1,69 @@
+table customer_rfm
+	column CustomerKey
+		dataType: int64
+		isKey
+		sourceColumn: CustomerKey
+		summarizeBy: none
+
+	column LastOrderDate
+		dataType: dateTime
+		sourceColumn: last_order_date
+		summarizeBy: none
+		formatString: Long Date
+
+	column RecencyDays
+		dataType: int64
+		sourceColumn: recency_days
+		summarizeBy: average
+
+	column Frequency
+		dataType: int64
+		sourceColumn: frequency
+		summarizeBy: average
+
+	column Monetary
+		dataType: double
+		sourceColumn: monetary
+		summarizeBy: sum
+		formatString: \$ #,##0.00
+
+	column RScore
+		dataType: int64
+		sourceColumn: R_score
+		summarizeBy: none
+
+	column FScore
+		dataType: int64
+		sourceColumn: F_score
+		summarizeBy: none
+
+	column MScore
+		dataType: int64
+		sourceColumn: M_score
+		summarizeBy: none
+
+	column FMScore
+		dataType: int64
+		sourceColumn: FM_score
+		summarizeBy: none
+
+	column RFMScoreLabel
+		dataType: string
+		sourceColumn: rfm_score_label
+		summarizeBy: none
+
+	column Segment
+		dataType: string
+		sourceColumn: segment
+		summarizeBy: none
+
+	partition customer_rfm = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "customer_rfm.csv"),[Delimiter=",", Columns=11, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Headers,{{"CustomerKey", Int64.Type}, {"last_order_date", type date}, {"recency_days", Int64.Type}, {"frequency", Int64.Type}, {"monetary", type number}, {"R_score", Int64.Type}, {"F_score", Int64.Type}, {"M_score", Int64.Type}, {"FM_score", Int64.Type}, {"rfm_score_label", type text}, {"segment", type text}})
+			in
+			    Typed
+		```

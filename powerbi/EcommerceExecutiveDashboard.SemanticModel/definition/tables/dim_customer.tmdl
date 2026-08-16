@@ -1,0 +1,63 @@
+table dim_customer
+	column CustomerKey
+		dataType: int64
+		isKey
+		sourceColumn: CustomerKey
+		summarizeBy: none
+
+	column Gender
+		dataType: string
+		sourceColumn: Gender
+		summarizeBy: none
+
+	column Name
+		dataType: string
+		sourceColumn: Name
+		summarizeBy: none
+
+	column City
+		dataType: string
+		sourceColumn: City
+		summarizeBy: none
+
+	column StateCode
+		dataType: string
+		sourceColumn: State Code
+		summarizeBy: none
+
+	column State
+		dataType: string
+		sourceColumn: State
+		summarizeBy: none
+
+	column ZipCode
+		dataType: string
+		sourceColumn: Zip Code
+		summarizeBy: none
+
+	column Country
+		dataType: string
+		sourceColumn: Country
+		summarizeBy: none
+
+	column Continent
+		dataType: string
+		sourceColumn: Continent
+		summarizeBy: none
+
+	column Birthday
+		dataType: dateTime
+		sourceColumn: Birthday
+		summarizeBy: none
+		formatString: Long Date
+
+	partition dim_customer = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "customers_clean.csv"),[Delimiter=",", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Headers,{{"CustomerKey", Int64.Type}, {"Gender", type text}, {"Name", type text}, {"City", type text}, {"State Code", type text}, {"State", type text}, {"Zip Code", type text}, {"Country", type text}, {"Continent", type text}, {"Birthday", type date}})
+			in
+			    Typed
+		```

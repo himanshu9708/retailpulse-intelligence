@@ -1,0 +1,50 @@
+{
+  "id": 0,
+  "resourcePackages": [],
+  "config": "{}",
+  "layoutOptimization": 0,
+  "sections": [
+    {
+      "name": "ReportSection1",
+      "displayName": "Executive Overview",
+      "filters": "[]",
+      "ordinal": 0,
+      "visualContainers": [],
+      "config": "{}",
+      "height": 720,
+      "width": 1280
+    },
+    {
+      "name": "ReportSection2",
+      "displayName": "Sales Performance",
+      "filters": "[]",
+      "ordinal": 1,
+      "visualContainers": [],
+      "config": "{}",
+      "height": 720,
+      "width": 1280
+    },
+    {
+      "name": "ReportSection3",
+      "displayName": "Customer Intelligence",
+      "filters": "[]",
+      "ordinal": 2,
+      "visualContainers": [],
+      "config": "{}",
+      "height": 720,
+      "width": 1280
+    },
+    {
+      "name": "ReportSection4",
+      "displayName": "Retention",
+      "filters": "[]",
+      "ordinal": 3,
+      "visualContainers": [],
+      "config": "{}",
+      "height": 720,
+      "width": 1280
+    }
+  ],
+  "sectionGroups": [],
+  "settings": {}
+}

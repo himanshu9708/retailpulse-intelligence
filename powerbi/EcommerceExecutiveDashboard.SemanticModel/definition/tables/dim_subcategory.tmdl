@@ -1,0 +1,29 @@
+table dim_subcategory
+	column SubcategoryKey
+		dataType: string
+		isKey
+		sourceColumn: SubcategoryKey
+		summarizeBy: none
+
+	column Subcategory
+		dataType: string
+		sourceColumn: Subcategory
+		summarizeBy: none
+
+	column CategoryKey
+		dataType: string
+		sourceColumn: CategoryKey
+		summarizeBy: none
+
+	partition dim_subcategory = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "products_clean.csv"),[Delimiter=",", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Selected = Table.SelectColumns(Headers, {"SubcategoryKey", "Subcategory", "CategoryKey"}),
+			    Distinct = Table.Distinct(Selected),
+			    Typed = Table.TransformColumnTypes(Distinct,{{"SubcategoryKey", type text}, {"Subcategory", type text}, {"CategoryKey", type text}})
+			in
+			    Typed
+		```

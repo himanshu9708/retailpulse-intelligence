@@ -1,0 +1,24 @@
+table dim_category
+	column CategoryKey
+		dataType: string
+		isKey
+		sourceColumn: CategoryKey
+		summarizeBy: none
+
+	column Category
+		dataType: string
+		sourceColumn: Category
+		summarizeBy: none
+
+	partition dim_category = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "products_clean.csv"),[Delimiter=",", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Selected = Table.SelectColumns(Headers, {"CategoryKey", "Category"}),
+			    Distinct = Table.Distinct(Selected),
+			    Typed = Table.TransformColumnTypes(Distinct,{{"CategoryKey", type text}, {"Category", type text}})
+			in
+			    Typed
+		```

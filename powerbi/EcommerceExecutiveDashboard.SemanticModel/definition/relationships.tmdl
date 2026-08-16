@@ -1,0 +1,28 @@
+relationship rel_sales_customer
+	fromColumn: fact_sales.CustomerKey
+	toColumn: dim_customer.CustomerKey
+
+relationship rel_sales_store
+	fromColumn: fact_sales.StoreKey
+	toColumn: dim_store.StoreKey
+
+relationship rel_sales_product
+	fromColumn: fact_sales.ProductKey
+	toColumn: dim_product.ProductKey
+
+relationship rel_sales_date
+	fromColumn: fact_sales.OrderDate
+	toColumn: dim_date.DateKey
+
+relationship rel_product_subcategory
+	fromColumn: dim_product.SubcategoryKey
+	toColumn: dim_subcategory.SubcategoryKey
+
+relationship rel_subcategory_category
+	fromColumn: dim_subcategory.CategoryKey
+	toColumn: dim_category.CategoryKey
+
+relationship rel_rfm_customer
+	fromColumn: customer_rfm.CustomerKey
+	toColumn: dim_customer.CustomerKey
+

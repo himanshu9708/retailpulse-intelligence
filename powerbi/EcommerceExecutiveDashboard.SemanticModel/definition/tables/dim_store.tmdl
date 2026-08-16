@@ -1,0 +1,44 @@
+table dim_store
+	column StoreKey
+		dataType: int64
+		isKey
+		sourceColumn: StoreKey
+		summarizeBy: none
+
+	column Country
+		dataType: string
+		sourceColumn: Country
+		summarizeBy: none
+
+	column State
+		dataType: string
+		sourceColumn: State
+		summarizeBy: none
+
+	column SquareMeters
+		dataType: double
+		sourceColumn: Square Meters
+		summarizeBy: sum
+		formatString: #,##0
+
+	column OpenDate
+		dataType: dateTime
+		sourceColumn: Open Date
+		summarizeBy: none
+		formatString: Long Date
+
+	column IsOnline
+		dataType: boolean
+		sourceColumn: Is_Online
+		summarizeBy: none
+
+	partition dim_store = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "stores_clean.csv"),[Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Headers,{{"StoreKey", Int64.Type}, {"Country", type text}, {"State", type text}, {"Square Meters", type number}, {"Open Date", type date}, {"Is_Online", type logical}})
+			in
+			    Typed
+		```

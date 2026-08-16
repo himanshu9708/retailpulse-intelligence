@@ -1,0 +1,5 @@
+/// Absolute path to this project's data/processed folder, ending in a path
+/// separator. Edit this default value before opening the project (or via
+/// Power Query Editor -> Manage Parameters once open), or every table's
+/// data source will fail to resolve.
+expression DataFolder = "C:\path\to\ecommerce-customer-sales-analytics\data\processed\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]

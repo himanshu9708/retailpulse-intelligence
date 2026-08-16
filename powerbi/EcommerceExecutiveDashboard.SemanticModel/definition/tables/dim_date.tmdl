@@ -1,0 +1,69 @@
+table dim_date
+	column DateKey
+		dataType: dateTime
+		isKey
+		sourceColumn: DateKey
+		summarizeBy: none
+		formatString: Long Date
+
+	column Year
+		dataType: int64
+		sourceColumn: Year
+		summarizeBy: none
+
+	column Quarter
+		dataType: int64
+		sourceColumn: Quarter
+		summarizeBy: none
+
+	column Month
+		dataType: int64
+		sourceColumn: Month
+		summarizeBy: none
+
+	column MonthName
+		dataType: string
+		sourceColumn: MonthName
+		summarizeBy: none
+
+	column Day
+		dataType: int64
+		sourceColumn: Day
+		summarizeBy: none
+
+	column DayOfWeek
+		dataType: int64
+		sourceColumn: DayOfWeek
+		summarizeBy: none
+
+	column DayName
+		dataType: string
+		sourceColumn: DayName
+		summarizeBy: none
+
+	column IsWeekend
+		dataType: boolean
+		sourceColumn: IsWeekend
+		summarizeBy: none
+
+	partition dim_date = m
+		mode: import
+		source = ```
+			let
+			    StartDate = #date(2016,1,1),
+			    EndDate = #date(2021,12,31),
+			    DayCount = Duration.Days(EndDate - StartDate) + 1,
+			    DateList = List.Dates(StartDate, DayCount, #duration(1,0,0,0)),
+			    DateTable = Table.FromList(DateList, Splitter.SplitByNothing(), {"DateKey"}),
+			    Typed = Table.TransformColumnTypes(DateTable, {{"DateKey", type date}}),
+			    AddYear = Table.AddColumn(Typed, "Year", each Date.Year([DateKey]), Int64.Type),
+			    AddQuarter = Table.AddColumn(AddYear, "Quarter", each Date.QuarterOfYear([DateKey]), Int64.Type),
+			    AddMonth = Table.AddColumn(AddQuarter, "Month", each Date.Month([DateKey]), Int64.Type),
+			    AddMonthName = Table.AddColumn(AddMonth, "MonthName", each Date.MonthName([DateKey]), type text),
+			    AddDay = Table.AddColumn(AddMonthName, "Day", each Date.Day([DateKey]), Int64.Type),
+			    AddDayOfWeek = Table.AddColumn(AddDay, "DayOfWeek", each Date.DayOfWeek([DateKey], Day.Monday), Int64.Type),
+			    AddDayName = Table.AddColumn(AddDayOfWeek, "DayName", each Date.DayOfWeekName([DateKey]), type text),
+			    AddIsWeekend = Table.AddColumn(AddDayName, "IsWeekend", each Date.DayOfWeek([DateKey], Day.Monday) >= 5, type logical)
+			in
+			    AddIsWeekend
+		```

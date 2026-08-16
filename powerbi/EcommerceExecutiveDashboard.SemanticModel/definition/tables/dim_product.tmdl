@@ -1,0 +1,64 @@
+table dim_product
+	column ProductKey
+		dataType: int64
+		isKey
+		sourceColumn: ProductKey
+		summarizeBy: none
+
+	column ProductName
+		dataType: string
+		sourceColumn: Product Name
+		summarizeBy: none
+
+	column Brand
+		dataType: string
+		sourceColumn: Brand
+		summarizeBy: none
+
+	column Color
+		dataType: string
+		sourceColumn: Color
+		summarizeBy: none
+
+	column UnitCostUSD
+		dataType: double
+		sourceColumn: Unit Cost USD
+		summarizeBy: none
+		formatString: \$ #,##0.00
+
+	column UnitPriceUSD
+		dataType: double
+		sourceColumn: Unit Price USD
+		summarizeBy: none
+		formatString: \$ #,##0.00
+
+	column SubcategoryKey
+		dataType: string
+		sourceColumn: SubcategoryKey
+		summarizeBy: none
+
+	column Subcategory
+		dataType: string
+		sourceColumn: Subcategory
+		summarizeBy: none
+
+	column CategoryKey
+		dataType: string
+		sourceColumn: CategoryKey
+		summarizeBy: none
+
+	column Category
+		dataType: string
+		sourceColumn: Category
+		summarizeBy: none
+
+	partition dim_product = m
+		mode: import
+		source = ```
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "products_clean.csv"),[Delimiter=",", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Headers,{{"ProductKey", Int64.Type}, {"Product Name", type text}, {"Brand", type text}, {"Color", type text}, {"Unit Cost USD", type number}, {"Unit Price USD", type number}, {"SubcategoryKey", type text}, {"Subcategory", type text}, {"CategoryKey", type text}, {"Category", type text}})
+			in
+			    Typed
+		```

@@ -1,0 +1,16 @@
+model Model
+	culture: en-US
+	sourceQueryCulture: en-US
+
+	ref table dim_date
+	ref table dim_customer
+	ref table dim_store
+	ref table dim_category
+	ref table dim_subcategory
+	ref table dim_product
+	ref table fact_sales
+	ref table customer_rfm
+
+	ref expression DataFolder
+
+	annotation PBI_QueryOrder = ["DataFolder","dim_date","dim_customer","dim_store","dim_category","dim_subcategory","dim_product","fact_sales","customer_rfm"]
